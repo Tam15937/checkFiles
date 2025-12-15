@@ -48,7 +48,6 @@ public class FileAnalysisService {
                     if (Files.isRegularFile(damagedFile)) {
                         Path originalFile = originalDir.resolve(damagedFile.getFileName());
                         if (!Files.exists(originalFile)) {
-
                             FileComparisonResult result = new FileComparisonResult();
                             result.setFilename(damagedFile.getFileName().toString());
                             result.setDamaged(true);
