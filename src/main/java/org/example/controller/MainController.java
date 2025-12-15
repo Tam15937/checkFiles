@@ -1,14 +1,19 @@
 package org.example.controller;
 
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.MediaType;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @RestController
 public class MainController {
-    @GetMapping(value = {"/"})
+    @GetMapping(value = "/", produces = MediaType.TEXT_HTML_VALUE)
     public String home() throws IOException {
-        return "index.html";
+        ClassPathResource htmlFile = new ClassPathResource("/templates/index.html");
+        return StreamUtils.copyToString(htmlFile.getInputStream(), StandardCharsets.UTF_8);
     }
 }
