@@ -13,7 +13,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.5</version> <!-- Поддерживает Java 21 -->
+        <version>3.1.5</version>
         <relativePath/>
     </parent>
 
@@ -39,10 +39,23 @@
     </dependencies>
 
     <build>
+        <finalName>file-damage-analyzer</finalName>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>org.example.Application</mainClass>
+                    <finalName>file-damage-analyzer</finalName>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
