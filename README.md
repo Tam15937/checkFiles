@@ -27,30 +27,30 @@ The service compares files between two directories, identifies differences, and 
 ---
 
 ## Project Structure
-
 file-damage-analyzer/
 ├── src/
-│ ├── main/
-│ │ ├── java/org/example/
-│ │ │ ├── Application.java
-│ │ │ ├── controller/
-│ │ │ ├── service/
-│ │ │ └── dto/
-│ │ └── resources/
-│ │ ├── static/
-│ │ │ ├── css/
-│ │ │ ├── js/
-│ │ │ └── index.html
-│ │ └── application.properties
+│   ├── main/
+│   │   ├── java/org/example/
+│   │   │   ├── Application.java
+│   │   │   ├── controller/
+│   │   │   ├── service/
+│   │   │   └── dto/
+│   │   └── resources/
+│   │       ├── static/
+│   │       │   ├── css/
+│   │       │   ├── js/
+│   │       │   └── index.html
+│   │       └── application.properties
 ├── rpm/
-│ ├── file-damage-analyzer.spec
-│ └── file-damage-analyzer.service
+│   ├── file-damage-analyzer.spec
+│   └── file-damage-analyzer.service
 ├── .gear/
-│ └── rules
+│   └── rules
 ├── pom.xml
 ├── application.properties
 ├── LICENSE
 └── README.md
+
 
 
 ---
@@ -162,20 +162,19 @@ sudo journalctl -u file-damage-analyzer -f
 ## 6. Directory Structure After Installation
 
 /etc/file-damage-analyzer/
-└── application.properties # Configuration
+└── application.properties        # Configuration
 
 /usr/share/file-damage-analyzer/
-└── file-damage-analyzer.jar # Application JAR
+└── file-damage-analyzer.jar      # Application JAR
 
 /usr/bin/
-└── file-damage-analyzer # Launch script
+└── file-damage-analyzer          # Launch script
 
 /usr/lib/systemd/system/
-└── file-damage-analyzer.service # Systemd service
+└── file-damage-analyzer.service  # Systemd service
 
-/var/log/file-damage-analyzer/ # Log directory
-/var/lib/file-damage-analyzer/ # Data directory
-
+/var/log/file-damage-analyzer/    # Log directory
+/var/lib/file-damage-analyzer/    # Data directory
 ---
 
 ## 7. Test with Sample Directories
