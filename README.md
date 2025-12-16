@@ -21,32 +21,6 @@ Build Tool: Maven
 
 Packaging: RPM for ALT Linux
 
-# Project Structure
-
-file-damage-analyzer/
-├── src/                    # Java source code
-│   ├── main/
-│   │   ├── java/org/example/
-│   │   │   ├── Application.java
-│   │   │   ├── controller/
-│   │   │   ├── service/
-│   │   │   └── dto/
-│   │   └── resources/
-│   │       ├── static/     # Frontend files
-│   │       │   ├── css/
-│   │       │   ├── js/
-│   │       │   └── index.html
-│   │       └── application.properties
-├── rpm/                    # RPM packaging files
-│   ├── file-damage-analyzer.spec
-│   └── file-damage-analyzer.service
-├── .gear/                  # Gear build configuration
-│   └── rules
-├── pom.xml                # Maven configuration
-├── application.properties # Application configuration
-└── LICENSE
-
-
 ## 1. Clone and Build
 
 git clone <repository-url>
@@ -128,24 +102,6 @@ sudo systemctl stop file-damage-analyzer
 
 ### View logs
 sudo journalctl -u file-damage-analyzer -f
-
-
-# Directory Structure After Installation
-text
-/etc/file-damage-analyzer/
-└── application.properties  # Configuration
-
-/usr/share/file-damage-analyzer/
-└── file-damage-analyzer.jar  # Application JAR
-
-/usr/bin/
-└── file-damage-analyzer  # Launch script
-
-/usr/lib/systemd/system/
-└── file-damage-analyzer.service  # Systemd service
-
-/var/log/file-damage-analyzer/  # Log directory
-/var/lib/file-damage-analyzer/  # Data directory
 
 # Test with Sample Directories
 bash
