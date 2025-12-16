@@ -1,0 +1,93 @@
+# .gear/rules
+Name: file-damage-analyzer
+Version: 1.0.0
+Release: alt1
+Summary: Web service for analyzing damaged files in directories
+Group: Applications/File
+License: MIT
+URL: https://github.com/yourusername/file-damage-analyzer
+
+
+Source0: %{name}-%{version}.jar
+Source1: %{name}.service
+Source2: application.properties
+Source3: %{name}-%{version}.tar.gz
+
+
+BuildRequires: java-21-openjdk-devel
+BuildRequires: maven
+BuildRequires: rpm-build
+
+Requires: java-21-openjdk
+Requires(post): systemd
+Requires(preun): systemd
+
+%description
+Web service for analyzing damaged files in directories.
+
+%prep
+%setup -q -n %{name}-%{version}
+cp %{SOURCE1} .
+cp %{SOURCE2} .
+
+%build
+mvn clean package -DskipTests
+
+%install
+rm -rf %{buildroot}
+mkdir -p %{buildroot}%{_sysconfdir}/%{name}
+mkdir -p %{buildroot}%{_bindir}
+mkdir -p %{buildroot}%{_unitdir}
+mkdir -p %{buildroot}/usr/share/%{name}
+mkdir -p %{buildroot}/var/log/%{name}
+mkdir -p %{buildroot}/var/lib/%{name}
+
+install -m 644 target/%{name}.jar %{buildroot}/usr/share/%{name}/%{name}.jar
+install -m 644 application.properties %{buildroot}%{_sysconfdir}/%{name}/application.properties
+
+cat > %{buildroot}%{_bindir}/%{name} << 'EOF'
+#!/bin/bash
+exec java -jar /usr/share/file-damage-analyzer/file-damage-analyzer.jar "$@"
+EOF
+chmod 755 %{buildroot}%{_bindir}/%{name}
+
+install -m 644 %{name}.service %{buildroot}%{_unitdir}/%{name}.service
+
+%clean
+rm -rf %{buildroot}
+
+%pre
+getent group %{name} >/dev/null || groupadd -r %{name}
+getent passwd %{name} >/dev/null || useradd -r -g %{name} -s /sbin/nologin -d /var/lib/%{name} %{name}
+
+%post
+mkdir -p /var/log/%{name} /var/lib/%{name}
+chown %{name}:%{name} /var/log/%{name} /var/lib/%{name}
+chmod 755 /var/log/%{name} /var/lib/%{name}
+systemctl daemon-reload >/dev/null 2>&1 || :
+systemctl preset %{name}.service >/dev/null 2>&1 || :
+
+%preun
+if [ $1 -eq 0 ]; then
+    systemctl --no-reload disable %{name}.service >/dev/null 2>&1 || :
+    systemctl stop %{name}.service >/dev/null 2>&1 || :
+fi
+
+%postun
+systemctl daemon-reload >/dev/null 2>&1 || :
+
+%files
+%defattr(-,root,root,-)
+%license LICENSE
+%doc README.md
+%attr(755,root,root) %{_bindir}/%{name}
+%attr(644,root,root) /usr/share/%{name}/%{name}.jar
+%config(noreplace) %attr(644,%{name},%{name}) %{_sysconfdir}/%{name}/application.properties
+%attr(644,root,root) %{_unitdir}/%{name}.service
+%dir %attr(755,%{name},%{name}) /var/log/%{name}
+%dir %attr(755,%{name},%{name}) /var/lib/%{name}
+%dir %attr(755,root,root) %{_sysconfdir}/%{name}
+
+%changelog
+* Tue Dec 15 2023 Your Name <email@example.com> - 1.0.0-alt1
+- Initial package

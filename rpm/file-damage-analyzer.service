@@ -1,41 +1,14 @@
 [Unit]
 Description=File Damage Analyzer Service
 After=network.target
-Wants=network.target
 
 [Service]
 Type=simple
 User=file-damage-analyzer
 Group=file-damage-analyzer
-
-
-ExecStart=/usr/bin/file-damage-analyzer
-
-
-WorkingDirectory=/var/lib/file-damage-analyzer
-
-
+ExecStart=/usr/bin/file-damage-analyzer --spring.config.location=file:/etc/file-damage-analyzer/application.properties
 Restart=on-failure
 RestartSec=10
-
-
-LimitNOFILE=65536
-
-
-NoNewPrivileges=true
-PrivateTmp=true
-ProtectSystem=full
-ProtectHome=read-only
-ReadWritePaths=/var/log/file-damage-analyzer /var/lib/file-damage-analyzer
-
-
-Environment="JAVA_OPTS=-Xmx512m -Xms256m"
-Environment="LOG_PATH=/var/log/file-damage-analyzer"
-
-
-StandardOutput=journal
-StandardError=journal
-SyslogIdentifier=file-damage-analyzer
 
 [Install]
 WantedBy=multi-user.target
